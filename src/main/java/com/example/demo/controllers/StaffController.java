@@ -48,4 +48,10 @@ public class StaffController {
                 .findAny()
                 .orElse(null);
     }
+
+    @DeleteMapping("/delete/{staffId}")
+    public void deleteStaff(@PathVariable("staff_id") Long staffId) {
+        staffs.removeIf(staff -> staff.Id().equals(staffId));
+    }
+
 }

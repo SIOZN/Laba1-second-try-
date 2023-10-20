@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("api/cars/{car_id}/footballOrganizations")
+@RequestMapping("api/staffs/{staffId}/footballOrganizations")
 public class FootballOrganizationController {
 
 
