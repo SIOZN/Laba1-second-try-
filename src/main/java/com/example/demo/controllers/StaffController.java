@@ -8,6 +8,7 @@ import com.example.demo.models.Staff;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class StaffController {
     public StaffController(List<Staff> staffList) {
 
         try {
-        String strDate1 = "14.10.2023";
-        String strDate2 = "28.02.2023";
+        String strDate1 = "14.10.2003";
+        String strDate2 = "28.02.2003";
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         Date date1 = formatter.parse(strDate1);
         Date date2 = formatter.parse(strDate2);
@@ -34,7 +35,7 @@ public class StaffController {
             Staff n2 = new Staff(2L,"Danil","Maslov","Borisovich",
                     true, date2, PLAYER, 34000);
 
-        staffs = List.of(n1,n2);
+        staffs = new ArrayList<>(List.of(n1,n2));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -53,9 +54,23 @@ public class StaffController {
                 .orElse(null);
     }
 
-    @DeleteMapping("/del/{staffId}")
+    @DeleteMapping("/{staffId}")
     public void deleteStaff(@PathVariable("staffId") Long staffId) {
         staffs.remove(getStaff(staffId));
     }
 
+    @PostMapping("add/{staffId}")
+    public Staff addStaff(@RequestBody Staff newStaffs) {
+        staffs.add(newStaffs);
+        return newStaffs;
+    }
+
+    @PutMapping("/{staffId}")
+    public void putStaff(@PathVariable("staffId") Long staffId, @RequestBody Staff newStaffs) {
+        staffs.remove(getStaff(staffId));
+        if (newStaffs != null) {
+            staffs.add(newStaffs);
+
+        }
+        }
 }
