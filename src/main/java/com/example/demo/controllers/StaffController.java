@@ -1,8 +1,14 @@
 package com.example.demo.controllers;
 
 
+import com.example.demo.exceprion.NotFoundException;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.models.Staff;
+import com.example.demo.Repository.StaffRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+
 
 
 import java.text.DateFormat;
@@ -72,5 +78,19 @@ public class StaffController {
             staffs.add(newStaffs);
 
         }
-        }
+    }
+
+    //@PostMapping
+    //@ResponseStatus(HttpStatus.CREATED)
+    //public void create(@RequestBody Staff staff) {
+      //  StaffRepository.create(staff);
+    //}
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleException(NotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+
+
 }
