@@ -6,7 +6,7 @@ public record Staff(Long Id,
                     String Patronymic,
                     Boolean Gender,
                     Date Birth,
-                    UserPost userPost, // Enum
+                    UserPost Post, // Enum
                     Integer Salary
 
 

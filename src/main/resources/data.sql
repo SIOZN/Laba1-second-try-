@@ -1,5 +1,5 @@
-INSERT INTO STAFF VALUES (1,'Alex','Nemkov','Anatolyevich',TRUE, CURRENT_DATE(), 'DIRECTOR', 45000);
-INSERT INTO STAFF VALUES (2,'Danil','Maslov','Borisovich',TRUE, CURRENT_DATE(), 'PLAYER', 34000);
+INSERT INTO STAFF VALUES (1,'Alex','Nemkov','Anatolyevich',TRUE, CURRENT_DATE(), 2, 45000);
+INSERT INTO STAFF VALUES (2,'Danil','Maslov','Borisovich',TRUE, CURRENT_DATE(), 2, 34000);
 
 
 INSERT INTO FOOTBALLORGANIZATION VALUES (1,'Arsenal','Premier League', 1);

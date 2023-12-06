@@ -18,8 +18,8 @@ import java.util.List;
 @Repository
 public class FootballOrganizationRepositoryH2 implements FootballOrganizationRepository {
     private static final String CREATE = """
-                        insert into users (user_id, user_name, birthday, is_admin)
-                        values (:userId, :userName, :birthday, :admin)
+                        insert into users (Id, club_name, league, staff_id)
+                        values (:id, :clubName, :league, :staffId)
             """;
 
     private final RowMapper<FootballOrganization> rowMapper = new DataClassRowMapper<>(FootballOrganization.class);
@@ -37,15 +37,15 @@ public class FootballOrganizationRepositoryH2 implements FootballOrganizationRep
     @Override
     public FootballOrganization read(Long id) {
         try {
-            return jdbcTemplate.queryForObject("select * from users where user_id = ?", rowMapper, id);
+            return jdbcTemplate.queryForObject("select * from footballOrganizations where id = ?", rowMapper, id);
         } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("User with id = [" + id + "] not found", e);
+            throw new NotFoundException("footballOrganization with id = [" + id + "] not found", e);
         }
     }
 
     @Override
     public List<FootballOrganization> readAll() {
-        return jdbcTemplate.query("select * from users", rowMapper);
+        return jdbcTemplate.query("select * from footballOrganizations", rowMapper);
     }
 
     @Override

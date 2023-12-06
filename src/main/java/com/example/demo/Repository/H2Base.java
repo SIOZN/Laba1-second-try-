@@ -14,14 +14,28 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
+
 @Repository
 public class H2Base implements StaffRepository {
 
     private static final String CREATE = """
-                        insert into staff (Id, Name, Surname, Patronymic,Gender,Birth,userPost,Salary)
-                        values (:Id, :Name, :Surname, :Patronymic, :Gender, :Birth, :userPost, :Salary)
+                        INSERT INTO STAFF (Id, Name, Surname, Patronymic,Gender,Birth,Post,Salary)
+                        values (:id, :name, :surname, :patronymic, :gender, :birth, :post, :salary)
+                        """;
+//нужно изменить update и доделать контроллер
+    private static final String UPDATE = """ 
+            UPDATE STAFF SET
+            ID = :Id,
+            NAME = :name,
+            SURNAME = :surname,
+            PATRONYMIC = :patronymic,
+            GENDER = :gender,
+            BIRTH = :birth,
+            POST = :post,
+            SALARY = :salary
+            WHERE ID = :Id
             """;
-
     private final RowMapper<Staff> rowMapper = new DataClassRowMapper<>(Staff.class);
 
     private final JdbcTemplate jdbcTemplate;
@@ -52,5 +66,17 @@ public class H2Base implements StaffRepository {
     public void create(Staff staff) {
         BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(staff);
         namedParameterJdbcTemplate.update(CREATE, paramsSource);
+    }
+    
+    @Override
+    public void updateStaff(Staff staff, Integer staffId){
+        BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(staff);
+        namedParameterJdbcTemplate.update(UPDATE, paramsSource);
+    }
+
+    @Override
+    public void deleteStaff(Integer staffId) {
+            jdbcTemplate.update("DELETE FROM STAFF WHERE Id = ?", staffId);
+
     }
 }

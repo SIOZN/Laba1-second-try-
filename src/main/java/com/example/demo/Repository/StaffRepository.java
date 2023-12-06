@@ -12,4 +12,7 @@ public interface StaffRepository {
 
     void create(Staff staff);
 
+    void updateStaff(Staff staff, Integer staffId);
+
+    void deleteStaff(Integer staffId);
 }
