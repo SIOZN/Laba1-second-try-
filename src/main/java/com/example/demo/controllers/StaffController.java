@@ -49,8 +49,6 @@ public class StaffController {
     public void updateStaff(@RequestBody Staff staff, @PathVariable("staff_id") int staffId) {
         staffRepository.updateStaff(staff, staffId);
     }
-
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{staff_id}")
     public void deleteMember(@PathVariable("staff_id") int staffId) {

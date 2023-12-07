@@ -18,11 +18,11 @@ import java.util.List;
 
 
 @Repository
-public class H2Base implements StaffRepository {
+public class StaffRepositoryH2 implements StaffRepository {
 
     private static final String CREATE = """
                         INSERT INTO STAFF (Id, Name, Surname, Patronymic,Gender,Birth,Post,Salary)
-                        values (:id, :name, :surname, :patronymic, :gender, :birth, CAST(:post AS ENUM('DIRECTOR', 'CLEANER', 'PLAYER', 'MANAGER')), :salary)
+                        values (:id, :name, :surname, :patronymic, :gender, :birth, :post , :salary)
                         """;
 
     private static final String UPDATE = """ 
@@ -43,8 +43,8 @@ public class H2Base implements StaffRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
-    public H2Base(JdbcTemplate jdbcTemplate,
-                  NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public StaffRepositoryH2(JdbcTemplate jdbcTemplate,
+                             NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
