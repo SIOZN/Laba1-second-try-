@@ -4,7 +4,7 @@ import java.util.Date;
 
 public record FootballOrganization(
         Long Id,
-        String Club_Name,
+        String clubName,
         String League,
         Long staffId
 

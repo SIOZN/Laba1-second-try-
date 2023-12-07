@@ -1,5 +1,10 @@
 package com.example.demo.controllers;
+import com.example.demo.Repository.FootballOrganizationRepositoryH2;
+import com.example.demo.exceprion.NotFoundException;
 import com.example.demo.models.Staff;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.models.FootballOrganization;
 
@@ -14,48 +19,46 @@ import java.util.List;
 @RestController
 @RequestMapping("api/footballOrganizations")
 public class FootballOrganizationController {
+    private final FootballOrganizationRepositoryH2 FootballOrgH2;
 
-
-    private final List<FootballOrganization> footballOrganizationList;
-
-    public FootballOrganizationController() {
-            footballOrganizationList = new ArrayList<>(List.of(new FootballOrganization(1L, "Chelsea", "Premeir League",
-                    1L)));
-
+    @Autowired
+    public FootballOrganizationController(FootballOrganizationRepositoryH2 FootballOrgH2) {
+        this.FootballOrgH2 = FootballOrgH2;
     }
     @GetMapping
     public List<FootballOrganization> getFootballOrganization() {
-        return footballOrganizationList;
+        return FootballOrgH2.readAll();
     }
 
 
 
     @GetMapping("/{FootballOrganizationId}")
     public FootballOrganization getFootballOrganization(@PathVariable("FootballOrganizationId") Long FootballOrganizationId) {
-        return footballOrganizationList.stream()
-                .filter(staff -> staff.Id() == FootballOrganizationId)
-                .findAny()
-                .orElse(null);
-    }
-    @DeleteMapping("/{footballOrganizationId}")
-    public void deleteFootballOrganization(@PathVariable("footballOrganizationId") Long footballOrganizationId) {
-        footballOrganizationList.remove(getFootballOrganization(footballOrganizationId));
+        return FootballOrgH2.read(FootballOrganizationId);
     }
 
-    @PostMapping("/add/{footballOrganizationId}")
-    public void createFootballOrganization(@PathVariable("footballOrganizationId") Long footballOrganizationId,
-                                           @RequestBody FootballOrganization footballOrganization) {
-        if (footballOrganization != null) {
-            footballOrganizationList.add(footballOrganization);
-        }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody FootballOrganization footballOrganization) {
+        FootballOrgH2.createOrg(footballOrganization);
     }
 
-    @PutMapping("/{footballOrganizationId}")
-    public void putFootballOrganization(@PathVariable("footballOrganizationId") Long footballOrganizationId, @RequestBody FootballOrganization newfootballOrganizations) {
-        footballOrganizationList.remove(getFootballOrganization(footballOrganizationId));
 
-        if (newfootballOrganizations != null) {
-            footballOrganizationList.add(newfootballOrganizations);
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{FootballOrganizationId}")
+    public void updateFootballOrganization(@RequestBody FootballOrganization footballOrganization, @PathVariable("FootballOrganizationId") int FootballOrganizationId) {
+        FootballOrgH2.updateFootballOrganizations(footballOrganization, FootballOrganizationId);
+    }
+
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{FootballOrganizationId}")
+    public void deleteFootballOrganizations(@PathVariable("FootballOrganizationId") int FootballOrganizationId) {
+        FootballOrgH2.deleteFootballOrganizations(FootballOrganizationId);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleException(NotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

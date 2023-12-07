@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Types;
 import java.util.List;
 
 
@@ -21,9 +22,9 @@ public class H2Base implements StaffRepository {
 
     private static final String CREATE = """
                         INSERT INTO STAFF (Id, Name, Surname, Patronymic,Gender,Birth,Post,Salary)
-                        values (:id, :name, :surname, :patronymic, :gender, :birth, :post, :salary)
+                        values (:id, :name, :surname, :patronymic, :gender, :birth, CAST(:post AS ENUM('DIRECTOR', 'CLEANER', 'PLAYER', 'MANAGER')), :salary)
                         """;
-//нужно изменить update и доделать контроллер
+
     private static final String UPDATE = """ 
             UPDATE STAFF SET
             ID = :Id,
@@ -65,6 +66,7 @@ public class H2Base implements StaffRepository {
     @Override
     public void create(Staff staff) {
         BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(staff);
+        paramsSource.registerSqlType("post", Types.INTEGER);
         namedParameterJdbcTemplate.update(CREATE, paramsSource);
     }
     

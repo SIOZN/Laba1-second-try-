@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 
+import java.text.ParseException;
 import java.util.List;
 
 
@@ -23,7 +24,7 @@ public class StaffController {
 
 
     @Autowired
-    public StaffController(List<Staff> staffList, StaffRepository staffRepository) {
+    public StaffController(StaffRepository staffRepository) {
      this.staffRepository = staffRepository;
 
     }
