@@ -2,8 +2,10 @@ package com.example.demo.Repository;
 
 
 import com.example.demo.exceprion.NotFoundException;
+import com.example.demo.exceprion.NotUniquePrimaryKeyException;
 import com.example.demo.models.Staff;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -65,15 +67,23 @@ public class StaffRepositoryH2 implements StaffRepository {
 
     @Override
     public void create(Staff staff) {
-        BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(staff);
-        paramsSource.registerSqlType("post", Types.INTEGER);
-        namedParameterJdbcTemplate.update(CREATE, paramsSource);
+        try {
+            BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(staff);
+            paramsSource.registerSqlType("post", Types.NVARCHAR);
+            namedParameterJdbcTemplate.update(CREATE, paramsSource);
+        }
+        catch (DuplicateKeyException e){
+            throw new NotUniquePrimaryKeyException("Человек с таким id уже существует" + staff.Id(), e);
+
+        }
     }
     
     @Override
     public void updateStaff(Staff staff, Integer staffId){
-        BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(staff);
-        namedParameterJdbcTemplate.update(UPDATE, paramsSource);
+            BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(staff);
+            paramsSource.registerSqlType("post", Types.NVARCHAR);
+            namedParameterJdbcTemplate.update(UPDATE, paramsSource);
+
     }
 
     @Override

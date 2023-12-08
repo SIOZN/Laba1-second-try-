@@ -1,9 +1,11 @@
 package com.example.demo.Repository;
 
 import com.example.demo.exceprion.NotFoundException;
+import com.example.demo.exceprion.NotUniquePrimaryKeyException;
 import com.example.demo.models.FootballOrganization;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -59,8 +61,14 @@ public class FootballOrganizationRepositoryH2 implements FootballOrganizationRep
 
     @Override
     public void createOrg(FootballOrganization footballOrganization) {
-        BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(footballOrganization);
-        namedParameterJdbcTemplate.update(CREATE, paramsSource);
+        try {
+            BeanPropertySqlParameterSource paramsSource = new BeanPropertySqlParameterSource(footballOrganization);
+            namedParameterJdbcTemplate.update(CREATE, paramsSource);
+        }
+        catch (DuplicateKeyException e){
+            throw new NotUniquePrimaryKeyException("Футбольная организация с таким id уже существует" + footballOrganization.Id(), e);
+
+        }
     }
 
     @Override
