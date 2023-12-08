@@ -26,7 +26,6 @@ public class StaffRepositoryH2 implements StaffRepository {
                         INSERT INTO STAFF (Id, Name, Surname, Patronymic,Gender,Birth,Post,Salary)
                         values (:id, :name, :surname, :patronymic, :gender, :birth, :post , :salary)
                         """;
-
     private static final String UPDATE = """ 
             UPDATE STAFF SET
             ID = :Id,
@@ -43,7 +42,6 @@ public class StaffRepositoryH2 implements StaffRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     @Autowired
     public StaffRepositoryH2(JdbcTemplate jdbcTemplate,
                              NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
